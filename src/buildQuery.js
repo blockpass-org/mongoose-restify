@@ -10,8 +10,8 @@ const validOp = op => {
   }
 }
 
-module.exports = function(options) {
-  const doQueryJob = function(query, queryOptions) {
+module.exports = function (options) {
+  const doQueryJob = function (query, queryOptions) {
     const promise = new Promise((resolve, reject) => {
       if (!queryOptions) {
         return resolve(query)
@@ -25,11 +25,20 @@ module.exports = function(options) {
         query.skip(queryOptions.skip)
       }
 
-      if (options.limit && (!queryOptions.limit || queryOptions.limit === '0' || queryOptions.limit > options.limit)) {
+      if (
+        options.limit &&
+        (!queryOptions.limit ||
+          queryOptions.limit === '0' ||
+          queryOptions.limit > options.limit)
+      ) {
         queryOptions.limit = options.limit
       }
 
-      if (queryOptions.limit && query.op !== 'count' && !queryOptions.distinct) {
+      if (
+        queryOptions.limit &&
+        query.op !== 'count' &&
+        !queryOptions.distinct
+      ) {
         query.limit(queryOptions.limit)
       }
 
@@ -64,11 +73,20 @@ module.exports = function(options) {
   }
 
   if (get(options, 'cache', false)) {
+    const custom_normalizer = get(options, 'normalizer', {})
+    if (custom_normalizer !== {} && typeof custom_normalizer === 'function') {
+      return memoize(doQueryJob, {
+        promise: true,
+        maxAge: get(options, 'cache_age', 5000),
+        profileName: 'Query Funciton',
+        normalizer: custom_normalizer
+      })
+    }
     return memoize(doQueryJob, {
       promise: true,
       maxAge: get(options, 'cache_age', 5000),
       profileName: 'Query Funciton',
-      normalizer: function(args) {
+      normalizer: function (args) {
         const arg = {
           collectionName: get(args[0], 'mongooseCollection.collectionName', ''),
           op: validOp(get(args[0], 'op', '')),
