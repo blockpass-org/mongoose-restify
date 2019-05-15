@@ -38,7 +38,7 @@ module.exports = function(model, options, excludedMap) {
         if (options.totalCountHeader && !req.erm.query['distinct']) {
           options.contextFilter(contextModel, req, countFilteredContext => {
             buildQuery(
-              countFilteredContext.estimatedDocumentCount(),
+              countFilteredContext.countDocuments(),
               Object.assign(req.erm.query, {
                 skip: 0,
                 limit: 0
