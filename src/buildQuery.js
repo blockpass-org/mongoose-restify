@@ -47,7 +47,8 @@ module.exports = function(options) {
         query.lean(options.lean)
       }
 
-      if (options.cache && process.env.REDIS_CACHE) {
+      // This options is for cachegoose not a built in operation of mongoose
+      if (options.cache) {
         query.cache(options['cache_age'] || 30)
       }
 
