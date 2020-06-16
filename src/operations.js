@@ -59,7 +59,7 @@ module.exports = function(model, options, excludedMap) {
     const contextModel = (req.erm && req.erm.model) || model
 
     options.contextFilter(contextModel, req, filteredContext => {
-      buildQuery(filteredContext.estimatedDocumentCount(), req.erm.query).then(count => {
+      buildQuery(filteredContext.count(), req.erm.query).then(count => {
         req.erm.result = { count: count }
         req.erm.statusCode = 200
 
@@ -93,7 +93,7 @@ module.exports = function(model, options, excludedMap) {
     const contextModel = (req.erm && req.erm.model) || model
 
     options.contextFilter(contextModel, req, filteredContext => {
-      buildQuery(filteredContext.remove(), req.erm.query).then(() => {
+      buildQuery(filteredContext.deleteMany(), req.erm.query).then(() => {
         req.erm.statusCode = 204
 
         next()
@@ -236,6 +236,7 @@ module.exports = function(model, options, excludedMap) {
             },
             {
               new: true,
+              upsert: options.upsert,
               runValidators: options.runValidators
             }
           )

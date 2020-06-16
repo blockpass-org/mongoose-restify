@@ -13,7 +13,7 @@ describe('onError', () => {
 
   let res = {
     setHeader: () => {},
-    status: function () {
+    status: function() {
       return this
     },
     send: () => {}
@@ -25,10 +25,10 @@ describe('onError', () => {
   let next = sinon.spy()
 
   afterEach(() => {
-    setHeader.reset()
-    status.reset()
-    send.reset()
-    next.reset()
+    setHeader.resetHistory()
+    status.resetHistory()
+    send.resetHistory()
+    next.resetHistory()
   })
 
   it('with express', () => {
