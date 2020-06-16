@@ -47,6 +47,10 @@ module.exports = function(options) {
         query.lean(options.lean)
       }
 
+      if (options.cache && process.env.REDIS_CACHE) {
+        query.cache()
+      }
+
       resolve(query)
     })
 
