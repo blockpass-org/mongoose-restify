@@ -48,7 +48,7 @@ module.exports = function(options) {
       }
 
       if (options.cache && process.env.REDIS_CACHE) {
-        query.cache()
+        query.cache(options['cache_age'] || 30)
       }
 
       resolve(query)
