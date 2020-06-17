@@ -14,9 +14,9 @@ describe('prepareQuery', () => {
   let next = sinon.spy()
 
   afterEach(() => {
-    options.onError.reset()
+    options.onError.resetHistory()
     options.allowRegex = true
-    next.reset()
+    next.resetHistory()
   })
 
   describe('jsonQueryParser', () => {
@@ -112,7 +112,7 @@ describe('prepareQuery', () => {
     prepareQuery(options)(req, {}, next)
 
     sinon.assert.calledOnce(options.onError)
-    sinon.assert.calledWithExactly(options.onError, new Error('invalid_json_query'), req, {}, next)
+    sinon.assert.calledWithExactly(options.onError, sinon.match.instanceOf(Error) /*new Error('invalid_json_query')*/, req, {}, next)
     sinon.assert.notCalled(next)
   })
 
@@ -203,9 +203,11 @@ describe('prepareQuery', () => {
     prepareQuery(options)(req, {}, next)
 
     assert.deepEqual(req.erm.query, {
-      populate: [{
-        path: 'foo'
-      }]
+      populate: [
+        {
+          path: 'foo'
+        }
+      ]
     })
     sinon.assert.calledOnce(next)
     sinon.assert.calledWithExactly(next)
@@ -323,9 +325,11 @@ describe('prepareQuery', () => {
       prepareQuery(options)(req, {}, next)
 
       assert.deepEqual(req.erm.query, {
-        populate: [{
-          path: 'foo'
-        }]
+        populate: [
+          {
+            path: 'foo'
+          }
+        ]
       })
       sinon.assert.calledOnce(next)
       sinon.assert.calledWithExactly(next)
@@ -342,11 +346,14 @@ describe('prepareQuery', () => {
       prepareQuery(options)(req, {}, next)
 
       assert.deepEqual(req.erm.query, {
-        populate: [{
-          path: 'foo'
-        }, {
-          path: 'bar'
-        }]
+        populate: [
+          {
+            path: 'foo'
+          },
+          {
+            path: 'bar'
+          }
+        ]
       })
       sinon.assert.calledOnce(next)
       sinon.assert.calledWithExactly(next)
@@ -359,7 +366,7 @@ describe('prepareQuery', () => {
           populate: {
             path: 'foo.bar',
             select: 'baz',
-            match: { 'qux': 'quux' },
+            match: { qux: 'quux' },
             options: { sort: 'baz' }
           }
         }
@@ -368,12 +375,14 @@ describe('prepareQuery', () => {
       prepareQuery(options)(req, {}, next)
 
       assert.deepEqual(req.erm.query, {
-        populate: [{
-          path: 'foo.bar',
-          select: 'baz',
-          match: { 'qux': 'quux' },
-          options: { sort: 'baz' }
-        }]
+        populate: [
+          {
+            path: 'foo.bar',
+            select: 'baz',
+            match: { qux: 'quux' },
+            options: { sort: 'baz' }
+          }
+        ]
       })
       sinon.assert.calledOnce(next)
       sinon.assert.calledWithExactly(next)
@@ -391,10 +400,12 @@ describe('prepareQuery', () => {
       prepareQuery(options)(req, {}, next)
 
       assert.deepEqual(req.erm.query, {
-        populate: [{
-          path: 'foo',
-          select: 'bar baz'
-        }]
+        populate: [
+          {
+            path: 'foo',
+            select: 'bar baz'
+          }
+        ]
       })
       sinon.assert.calledOnce(next)
       sinon.assert.calledWithExactly(next)

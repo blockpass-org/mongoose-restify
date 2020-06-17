@@ -1,4 +1,4 @@
-/* *
+/**
  * todos.js
  *
  * Copyright (C) 2013 by Florian Holzapfel
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
-**/
+ **/
 var http = require('http')
 var express = require('express')
 var path = require('path')
@@ -47,10 +47,10 @@ restify.serve(app, ToDoModel, {
   // exclude: 'text,done'
 })
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(function (req, res) {
+app.use(function(req, res) {
   res.sendFile(path.join(__dirname, 'public/index.html'))
 })
 
-http.createServer(app).listen(app.get('port'), function () {
+http.createServer(app).listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'))
 })
